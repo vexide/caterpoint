@@ -19,7 +19,12 @@ export default {
 			return response.json();
 		});
 		console.log('Fetched ' + cats);
-		let randomCat = cats[Math.floor(Math.random() * cats.length)];
-		return fetch(env.CAT_API_URL + randomCat);
+		const randomCat = cats[Math.floor(Math.random() * cats.length)];
+
+		let redirect = (await fetch(env.CAT_API_URL + randomCat));
+		redirect.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+		redirect.headers.set('Pragma', 'no-cache');
+		redirect.headers.set('Expires', '0');
+		return redirect;
 	},
 } satisfies ExportedHandler<Env>;
