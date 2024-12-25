@@ -21,10 +21,19 @@ export default {
 		console.log('Fetched ' + cats);
 		const randomCat = cats[Math.floor(Math.random() * cats.length)];
 
-		let redirect = (await fetch(env.CAT_API_URL + randomCat));
-		redirect.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-		redirect.headers.set('Pragma', 'no-cache');
-		redirect.headers.set('Expires', '0');
+		let response = await fetch(env.CAT_API_URL + randomCat);
+
+		let redirect = new Response(response.body, {
+			status: response.status,
+			statusText: response.statusText,
+			headers: {
+				...Object.fromEntries(response.headers),
+				'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+				Pragma: 'no-cache',
+				Expires: '0',
+			},
+		});
+
 		return redirect;
 	},
 } satisfies ExportedHandler<Env>;
