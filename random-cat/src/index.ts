@@ -11,14 +11,15 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-interface CatList {
-	cats: string[];
-}
-
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		const cats: CatList = await fetch(env.CAT_API_URL + env.CAT_MANIFEST).then((response) => response.json());
-		let randomCat = cats.cats[Math.floor(Math.random() * cats.cats.length)];
+		console.log('Fetching random cat from ' + env.CAT_API_URL + env.CAT_MANIFEST);
+		const cats: string[] = await fetch(env.CAT_API_URL + env.CAT_MANIFEST).then((response) => {
+			console.log('Response status: ' + response.status);
+			return response.json();
+		});
+		console.log('Fetched ' + cats);
+		let randomCat = cats[Math.floor(Math.random() * cats.length)];
 		return fetch(env.CAT_API_URL + randomCat);
 	},
 } satisfies ExportedHandler<Env>;
