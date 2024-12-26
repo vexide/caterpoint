@@ -1,6 +1,6 @@
 #!/bin/sh
 
-OUTPUT_FILE="cats/cats.json"
+OUTPUT_FILE="./cats/cats.json"
 
 echo "[" > "$OUTPUT_FILE"
 
